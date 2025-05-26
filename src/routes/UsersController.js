@@ -13,6 +13,16 @@ router.post('/', async (req, res) => {
             return res.status(401).send({ message: 'Mot de passe incorrect' });
         }
         const { name, token } = req.body;
+        users.findOne({ token }, async (err, existingUser) => {
+            if (err) {
+                console.error('Error checking for existing user:', err);
+                return res.status(500).send({ message: 'Erreur interne du serveur' });
+            }
+            if (existingUser) {
+                return res.status(200).send({ message: 'Un utilisateur avec ce token existe déjà' });
+            }
+        }
+        );
         const user = new users({ name, token });
         await user.save();
         res.status(201).send(user);
