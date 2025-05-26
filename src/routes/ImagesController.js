@@ -19,7 +19,7 @@ if (!admin.apps.length) {
 }
 
 // Configuration des constantes
-const CONFIDENCE_THRESHOLD = 0.5;
+const CONFIDENCE_THRESHOLD = 0.7;
 const DETECTED_USERS = ['alice', 'bob', 'charlie', 'dave', 'eve'];
 const BACKEND_URL = process.env.BACKEND_URL || 'https://backend-safehome.onrender.com';
 const GRADIO_URL = process.env.GRADIO_URL;
