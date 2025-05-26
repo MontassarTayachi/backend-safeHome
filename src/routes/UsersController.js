@@ -5,11 +5,10 @@ require('dotenv').config();
 // Inscription d'un nouvel administrateur
 
 router.post('/', async (req, res) => {
-    console.log('Received request to create a new user:', req.body); // Log the request body
-
     try {
         const password = req.body.password;
         if (password !== process.env.ADMIN_PASSWORD) {
+            console.error('Mot de passe incorrect pour l\'inscription d\'un administrateur');
             return res.status(401).send({ message: 'Mot de passe incorrect' });
         }
         const { name, token } = req.body;
@@ -27,6 +26,7 @@ router.post('/', async (req, res) => {
         await user.save();
         res.status(201).send(user);
     } catch (err) {
+        console.error('Erreur lors de l\'inscription de l\'administrateur:', err);
         res.status(400).send(err);
     }
 });
