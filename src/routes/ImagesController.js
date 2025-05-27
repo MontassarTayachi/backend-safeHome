@@ -239,8 +239,7 @@ router.get('/last', async (req, res) => {
         }
         
         return res.status(200).json({
-            success: true,
-            data: lastImage
+            lastImage
         });
     } catch (error) {
         console.error('❌ Erreur lors de la récupération de la dernière image:', error);
@@ -256,35 +255,11 @@ router.get('/last', async (req, res) => {
  */
 router.get('/', async (req, res) => {
     try {
-        const { page = 1, limit = 10 } = req.query;
-        const skip = (parseInt(page) - 1) * parseInt(limit);
-        
-        const [images, total] = await Promise.all([
-            ImagesPerson.find()
-                .sort({ _id: -1 })
-                .skip(skip)
-                .limit(parseInt(limit)),
-            ImagesPerson.countDocuments()
-        ]);
-        
-        return res.status(200).json({
-            success: true,
-            data: {
-                images,
-                pagination: {
-                    page: parseInt(page),
-                    limit: parseInt(limit),
-                    total,
-                    pages: Math.ceil(total / parseInt(limit))
-                }
-            }
-        });
-    } catch (error) {
-        console.error('❌ Erreur lors de la récupération des images:', error);
-        return res.status(500).json({ 
-            success: false,
-            error: 'Erreur interne du serveur' 
-        });
+        const allImages = await ImagesPerson.find();
+        return res.status(200).json(allImages);
+    } catch (err) {
+        console.error('❌ Erreur :', err);
+        return res.status(500).json({ error: err.message });
     }
 });
 
