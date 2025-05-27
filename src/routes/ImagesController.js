@@ -230,27 +230,15 @@ router.post('/', upload.single('image'), async (req, res) => {
 router.get('/last', async (req, res) => {
     try {
         const lastImage = await ImagesPerson.findOne().sort({ _id: -1 });
-        
         if (!lastImage) {
-            return res.status(404).json({ 
-                success: false,
-                error: 'Aucune image trouvée' 
-            });
+            return res.status(404).json({ error: 'Aucune image trouvée' });
         }
-        
-        return res.status(200).json({
-            lastImage
-        });
-    } catch (error) {
-        console.error('❌ Erreur lors de la récupération de la dernière image:', error);
-        return res.status(500).json({ 
-            success: false,
-            error: 'Erreur interne du serveur' 
-        });
+        return res.status(200).json(lastImage);
+    } catch (err) {
+        console.error('❌ Erreur :', err);
+        return res.status(500).json({ error: err.message });
     }
-});
-
-/**
+});/**
  * Récupère toutes les images
  */
 router.get('/', async (req, res) => {
